@@ -19,7 +19,6 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Swift News"
         self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 254.0
         fetchArticles()
     }
     
@@ -27,8 +26,8 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
         self.networkService.fetchArticles { result in
             switch result {
             case .success(let articles):
-                self.articles = articles
                 DispatchQueue.main.async {
+                    self.articles = articles
                     self.tableView.reloadData()
                 }
             case .failure(let error):
@@ -38,7 +37,7 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
     }
 }
 
-extension ArticleListViewController: UITableViewDataSource {
+extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let articles = articles else { return 0 }
@@ -49,10 +48,20 @@ extension ArticleListViewController: UITableViewDataSource {
         guard let articles = articles,
         let articleCell = tableView.dequeueReusableCell(withIdentifier: ArticleTableViewCell.identifer) as? ArticleTableViewCell
             else { return UITableViewCell() }
-        articleCell.cellData = ArticleTableViewCell.CellData(title: articles[indexPath.row].title,
-                                                             image: articles[indexPath.row].thumbnail)
-        articleCell.accessoryType = .disclosureIndicator
+        let article = articles[indexPath.row]
+        articleCell.prepCell(with: ArticleTableViewCell.CellData(title: article.title,
+                                                                 imageURL: URL(string: article.thumbnail) ?? nil,
+                                                                 height: article.thumbnailHeight ?? nil))
         return articleCell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let articles = articles else { return 0 }
+        if let height = articles[indexPath.row].thumbnailHeight {
+            return CGFloat(height) + 40
+        } else {
+            return 83
+        }
     }
     
 }
