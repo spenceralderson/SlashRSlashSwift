@@ -19,7 +19,7 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Swift News"
         self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 80.0
+        self.tableView.estimatedRowHeight = 254.0
         fetchArticles()
     }
     

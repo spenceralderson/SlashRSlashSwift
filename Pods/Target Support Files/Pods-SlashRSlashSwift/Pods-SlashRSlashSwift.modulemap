@@ -1,0 +1,6 @@
+framework module Pods_SlashRSlashSwift {
+  umbrella header "Pods-SlashRSlashSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}
