@@ -30,4 +30,5 @@ struct Article: Decodable {
     let author: String
     let selftext: String
     let thumbnail: String
+    let thumbnailHeight: Int?
 }
