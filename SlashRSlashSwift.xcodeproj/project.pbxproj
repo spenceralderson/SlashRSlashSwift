@@ -16,6 +16,7 @@
 		847F187622FCC5A6000F7F60 /* SlashRSlashSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847F187522FCC5A6000F7F60 /* SlashRSlashSwiftUITests.swift */; };
 		847F188722FCC76B000F7F60 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847F188622FCC76B000F7F60 /* NetworkService.swift */; };
 		847F188922FCC77E000F7F60 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847F188822FCC77E000F7F60 /* Article.swift */; };
+		84C7FCDF22FD100E002B651C /* ArticleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C7FCDE22FD100D002B651C /* ArticleTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		847F187722FCC5A6000F7F60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		847F188622FCC76B000F7F60 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		847F188822FCC77E000F7F60 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		84C7FCDE22FD100D002B651C /* ArticleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				847F185922FCC5A5000F7F60 /* Main.storyboard */,
 				847F185722FCC5A5000F7F60 /* ArticleListViewController.swift */,
+				84C7FCDE22FD100D002B651C /* ArticleTableViewCell.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C7FCDF22FD100E002B651C /* ArticleTableViewCell.swift in Sources */,
 				847F188922FCC77E000F7F60 /* Article.swift in Sources */,
 				847F185822FCC5A5000F7F60 /* ArticleListViewController.swift in Sources */,
 				847F188722FCC76B000F7F60 /* NetworkService.swift in Sources */,
