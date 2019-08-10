@@ -48,12 +48,29 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
         self.dataTask(with: request, completion: completion)
     }
     
-    private func decodeData<T: Decodable>(httpResponse: HTTPURLResponse,
-                                              data: Data,
-                                              completion: @escaping (T?, Error?) -> ()) {
-        switch httpResponse.statusCode {
+    private func dataTask<T: Decodable>(with request: URLRequest,
+                                            completion: @escaping (T?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let response = response as? HTTPURLResponse else {
+                completion(nil, NetworkServiceError.notValidHTTPRespose)
+                return
+            }
+            guard let data = data else {
+                completion(nil, NetworkServiceError.badRequest)
+                return
+            }
+
+            self.decodeData(response: response, data: data, completion: completion)
+            }.resume()
+    }
+    
+    private func decodeData<T: Decodable>(response: HTTPURLResponse,
+                                          data: Data,
+                                          completion: @escaping (T?, Error?) -> ()) {
+        switch response.statusCode {
         case 200:
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let object = try decoder.decode(T.self, from: data)
                 completion((object), nil)
@@ -76,21 +93,6 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
         default:
             completion(nil, NetworkServiceError.unexpectedNetworkResponse)
         }
-    }
-    
-    private func dataTask<T: Decodable>(with request: URLRequest,
-                                            completion: @escaping (T?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, NetworkServiceError.notValidHTTPRespose)
-                return
-            }
-            guard let data = data else {
-                completion(nil, NetworkServiceError.badRequest)
-                return
-            }
-            self.decodeData(httpResponse: httpResponse, data: data, completion: completion)
-            }.resume()
     }
     
     func fetchArticles(completion: @escaping (Result<[Article] , Error>) -> ()) {
