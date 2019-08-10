@@ -35,6 +35,23 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
             }
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let path = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: path, animated: true)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == ArticleDetailViewController.segueIdentifer {
+            guard let articleDetailVC = segue.destination as? ArticleDetailViewController,
+                  let indexPath = sender as? IndexPath,
+                  let articles = articles
+                else { return }
+            articleDetailVC.article = articles[indexPath.row]
+        }
+    }
 }
 
 extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -64,5 +81,8 @@ extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate 
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: ArticleDetailViewController.segueIdentifer, sender: indexPath)
+    }
 }
 
