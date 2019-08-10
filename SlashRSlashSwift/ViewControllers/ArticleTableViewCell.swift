@@ -41,7 +41,7 @@ final class ArticleTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-    self.articleImageView.kf.cancelDownloadTask()
+        self.articleImageView.kf.cancelDownloadTask()
         self.articleImageView.image = nil
         self.constrainImageView(for: 0.0)
     }
