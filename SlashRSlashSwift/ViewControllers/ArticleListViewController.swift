@@ -16,10 +16,35 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUp()
+        fetchArticles()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let selectedIndexPath = tableView.indexPathForSelectedRow else { return }
+        self.tableView.deselectRow(at: selectedIndexPath, animated: true)
+    }
+    
+    private func setUp() {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Swift News"
         self.tableView.rowHeight = UITableView.automaticDimension
-        fetchArticles()
+        setupRefresher()
+    }
+    
+    private func setupRefresher() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.tableView.refreshControl = refreshControl
+    }
+    
+    @objc private func refresh() {
+        self.fetchArticles()
+    }
+    
+    private func endRefreshing() {
+        self.tableView.refreshControl?.endRefreshing()
     }
     
     private func fetchArticles() {
@@ -28,18 +53,13 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
             case .success(let articles):
                 DispatchQueue.main.async {
                     self.articles = articles
+                    self.endRefreshing()
                     self.tableView.reloadData()
                 }
             case .failure(let error):
                 print(error.localizedDescription)
+                self.endRefreshing()
             }
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let path = tableView.indexPathForSelectedRow {
-            tableView.deselectRow(at: path, animated: true)
         }
     }
     
