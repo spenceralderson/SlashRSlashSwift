@@ -12,12 +12,11 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
     
     @IBOutlet private weak var tableView: UITableView!
     
-    private var articles: [Article]?
+    private var viewModel: ArticleListViewModel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
-        fetchArticles()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -27,10 +26,33 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
     }
     
     private func setUp() {
+        self.setUpViewModel()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Swift News"
         self.tableView.rowHeight = UITableView.automaticDimension
         setupRefresher()
+    }
+    
+    private func setUpViewModel() {
+        self.viewModel = ArticleListViewModel()
+        self.viewModel.didChange = { [unowned self] (result: [Article]?, error)  in
+            self.handleResponse(result: result, error: error)
+        }
+    }
+    
+    private func handleResponse(result: [Article]?, error: Error?) {
+        DispatchQueue.main.async {
+            if let error = error {
+                guard let loacalizedError = error as? NetworkServiceError else {
+                    self.showGenericAlert(tittle: "Error", message: error.localizedDescription)
+                    return
+                }
+                self.showGenericAlert(tittle: "Error", message: loacalizedError.errorDescription ?? "")
+            } else {
+                self.endRefreshing()
+                self.tableView.reloadData()
+            }
+        }
     }
     
     private func setupRefresher() {
@@ -40,38 +62,18 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
     }
     
     @objc private func refresh() {
-        self.fetchArticles()
+        self.viewModel.fetchArticles()
     }
     
     private func endRefreshing() {
         self.tableView.refreshControl?.endRefreshing()
     }
     
-    private func fetchArticles() {
-        self.networkService.fetchArticles { result in
-            switch result {
-            case .success(let articles):
-                DispatchQueue.main.async {
-                    self.articles = articles
-                    self.endRefreshing()
-                    self.tableView.reloadData()
-                }
-            case .failure(let error):
-                if let error = error as? NetworkServiceError {
-                    self.showGenericAlert(tittle: "Error", message: error.errorDescription ?? "")
-                } else {
-                    self.showGenericAlert(tittle: "Error", message: error.localizedDescription)
-                }
-                self.endRefreshing()
-            }
-        }
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ArticleDetailViewController.segueIdentifer {
             guard let articleDetailVC = segue.destination as? ArticleDetailViewController,
                   let indexPath = sender as? IndexPath,
-                  let articles = articles
+                  let articles = viewModel.articles
                 else { return }
             articleDetailVC.article = articles[indexPath.row]
         }
@@ -81,12 +83,12 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
 extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let articles = articles else { return 0 }
+        guard let articles = viewModel.articles else { return 0 }
         return articles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let articles = articles,
+        guard let articles = viewModel.articles,
         let articleCell = tableView.dequeueReusableCell(withIdentifier: ArticleTableViewCell.identifer) as? ArticleTableViewCell
             else { return UITableViewCell() }
         let article = articles[indexPath.row]
@@ -97,7 +99,7 @@ extension ArticleListViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let articles = articles else { return 0 }
+        guard let articles = viewModel.articles else { return 0 }
         if let height = articles[indexPath.row].thumbnailHeight {
             return CGFloat(height) + 40
         } else {
