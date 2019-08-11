@@ -16,7 +16,7 @@ final class ArticleListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
+        self.setUp()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -30,7 +30,7 @@ final class ArticleListViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Swift News"
         self.tableView.rowHeight = UITableView.automaticDimension
-        setupRefresher()
+        self.setupRefresher()
     }
     
     private func setUpViewModel() {

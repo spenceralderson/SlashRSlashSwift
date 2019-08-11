@@ -20,7 +20,7 @@ final class ArticleDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.largeTitleDisplayMode = .never
-        prepView()
+        self.prepView()
     }
     
     private func prepView() {
