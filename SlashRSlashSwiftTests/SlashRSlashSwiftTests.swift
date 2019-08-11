@@ -9,7 +9,7 @@
 import XCTest
 @testable import SlashRSlashSwift
 
-class SlashRSlashSwiftTests: XCTestCase {
+class SlashRSlashSwiftTests: XCTestCase, NetworkServiceInjectable {
 
     func testModels() {
         let article = Article(title: "Test", created: Date(), articleBody: "BODY", thumbnail: "self", thumbnailHeight: 60)
@@ -27,5 +27,15 @@ class SlashRSlashSwiftTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
-
+    
+    func testFetchArticles() {
+        self.networkService.fetchArticles { result in
+            switch result {
+            case .success(let articles):
+                XCTAssert(articles.count > 0, "Sucessful response but no articles came back")
+            case .failure(let error):
+                XCTFail(error.localizedDescription)
+            }
+        }
+    }
 }
