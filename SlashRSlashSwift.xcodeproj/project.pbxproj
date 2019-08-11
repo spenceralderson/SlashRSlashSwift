@@ -21,6 +21,7 @@
 		84C7FCDF22FD100E002B651C /* ArticleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C7FCDE22FD100D002B651C /* ArticleTableViewCell.swift */; };
 		84FD681022FE481C00D08978 /* ArticleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD680F22FE481C00D08978 /* ArticleDetailViewController.swift */; };
 		84FD681222FE5B6F00D08978 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD681122FE5B6F00D08978 /* Helpers.swift */; };
+		84FD6815230052D800D08978 /* ArticleListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD6814230052D800D08978 /* ArticleListViewModel.swift */; };
 		8A899B731E0995A8FAA08982 /* Pods_SlashRSlashSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB5274E6B554C69EFE8E138 /* Pods_SlashRSlashSwiftTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		84C7FCDE22FD100D002B651C /* ArticleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleTableViewCell.swift; sourceTree = "<group>"; };
 		84FD680F22FE481C00D08978 /* ArticleDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailViewController.swift; sourceTree = "<group>"; };
 		84FD681122FE5B6F00D08978 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		84FD6814230052D800D08978 /* ArticleListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleListViewModel.swift; sourceTree = "<group>"; };
 		97B5B92DB5624F6597045F59 /* Pods-SlashRSlashSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlashRSlashSwift.debug.xcconfig"; path = "Target Support Files/Pods-SlashRSlashSwift/Pods-SlashRSlashSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		D31308E85B6647E01A9A5B39 /* Pods-SlashRSlashSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlashRSlashSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-SlashRSlashSwiftTests/Pods-SlashRSlashSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		EAB5274E6B554C69EFE8E138 /* Pods_SlashRSlashSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlashRSlashSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +178,7 @@
 			children = (
 				847F185522FCC5A5000F7F60 /* AppDelegate.swift */,
 				845D262D22FD0970006EDEC0 /* ViewControllers */,
+				84FD68132300527E00D08978 /* ViewModels */,
 				845D262C22FD095B006EDEC0 /* Models */,
 				845D262B22FD0947006EDEC0 /* Networking */,
 				84FD681122FE5B6F00D08978 /* Helpers.swift */,
@@ -202,6 +205,14 @@
 				847F187722FCC5A6000F7F60 /* Info.plist */,
 			);
 			path = SlashRSlashSwiftUITests;
+			sourceTree = "<group>";
+		};
+		84FD68132300527E00D08978 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				84FD6814230052D800D08978 /* ArticleListViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -426,6 +437,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84C7FCDF22FD100E002B651C /* ArticleTableViewCell.swift in Sources */,
+				84FD6815230052D800D08978 /* ArticleListViewModel.swift in Sources */,
 				84FD681222FE5B6F00D08978 /* Helpers.swift in Sources */,
 				847F188922FCC77E000F7F60 /* Article.swift in Sources */,
 				84FD681022FE481C00D08978 /* ArticleDetailViewController.swift in Sources */,
