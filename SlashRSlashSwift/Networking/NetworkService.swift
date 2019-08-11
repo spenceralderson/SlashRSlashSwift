@@ -19,22 +19,7 @@ enum NetworkServiceError: Error {
     case unexpectedNetworkResponse
     case decodingError
     case notAValidURL
-    
-    var localizedDescription: String? {
-        switch self {
-        case .notValidHTTPRespose:
-            return "Something went wrong, make sure you're connected to the internet and try again"
-        case .badRequest:
-            return "Something went wrong"
-        case .unexpectedNetworkResponse:
-            return "Something went wrong"
-        case .decodingError:
-            return "Something went wrong"
-        case .notAValidURL:
-            return "Something went wrong"
-        }
-    }
-    
+   
     public var errorDescription: String? {
         switch self {
         case .notValidHTTPRespose:
