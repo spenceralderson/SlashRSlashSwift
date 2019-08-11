@@ -26,7 +26,7 @@ final class ArticleDetailViewController: UIViewController {
     private func prepView() {
         guard let article = article else { return }
         self.title = article.title
-        self.articleBodyLabel.text = article.selftext
+        self.articleBodyLabel.text = article.articleBody
         guard article.thumbnail.isValidURL,
             let imageURL = URL(string: article.thumbnail) else {
             articleImageView.isHidden = true

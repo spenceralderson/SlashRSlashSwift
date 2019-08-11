@@ -11,23 +11,20 @@ import XCTest
 
 class SlashRSlashSwiftTests: XCTestCase {
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testModels() {
+        let article = Article(title: "Test", created: Date(), articleBody: "BODY", thumbnail: "self", thumbnailHeight: 60)
+        let articleResponse = ArticleResponse(kind: "t3", data: article)
+        let dataResponse = DataResponse(children: [articleResponse])
+        let response = Response(kind: "Listing", data: dataResponse)
+        
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        do {
+            let data = try encoder.encode(response.self)
+            let object = try decoder.decode(Response.self, from: data)
+            XCTAssertEqual(response, object)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
 
