@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ArticleListViewController: UIViewController, NetworkServiceInjectable {
+final class ArticleListViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     
