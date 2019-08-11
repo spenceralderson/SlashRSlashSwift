@@ -47,6 +47,8 @@ protocol NetworkManagerProtocol {
 
 fileprivate struct NetworkService: NetworkManagerProtocol {
     
+    private let baseUrlString = "https://www.reddit.com/r/"
+    
     private func perfromNetworkRequest<T: Decodable>(_ URLString: String,
                                                          httpsMethod: HTTPSMethod,
                                                          completion: @escaping (T?, Error?) -> ())  {
@@ -111,7 +113,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     }
     
     func fetchArticles(completion: @escaping (Result<[Article] , Error>) -> ()) {
-        self.perfromNetworkRequest("https://www.reddit.com/r/swift/.json", httpsMethod: .get) { (result: Response?, error) in
+        self.perfromNetworkRequest(baseUrlString + "swift/.json", httpsMethod: .get) { (result: Response?, error) in
             if let error = error {
                 completion(.failure(error))
             } else {

@@ -22,7 +22,7 @@ final class ArticleTableViewCell: UITableViewCell {
     static var identifer: String = "articleTableViewCell"
     
     private func constrainImageView(for height: CGFloat) {
-        articleIgameViewHeightConstraint.constant = height
+        self.articleIgameViewHeightConstraint.constant = height
     }
     
     func prepCell(with data: CellData) {
@@ -30,13 +30,13 @@ final class ArticleTableViewCell: UITableViewCell {
         if let imageURL = data.imageURL, imageURL.absoluteString != "self" {
             guard let imageViewHeight = data.height else { return }
             self.articleImageView.isHidden = false
-            constrainImageView(for: CGFloat(imageViewHeight))
-            layoutIfNeeded()
+            self.constrainImageView(for: CGFloat(imageViewHeight))
+            self.layoutIfNeeded()
             self.articleImageView.kf.setImage(with: imageURL)
         } else {
             self.articleImageView.isHidden = true
             self.constrainImageView(for: 0.0)
-            layoutIfNeeded()
+            self.layoutIfNeeded()
         }
     }
     

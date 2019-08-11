@@ -19,7 +19,7 @@ final class ArticleDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .never
         prepView()
     }
     
@@ -29,9 +29,9 @@ final class ArticleDetailViewController: UIViewController {
         self.articleBodyLabel.text = article.articleBody
         guard article.thumbnail.isValidURL,
             let imageURL = URL(string: article.thumbnail) else {
-            articleImageView.isHidden = true
+            self.articleImageView.isHidden = true
             return
         }
-        articleImageView.kf.setImage(with: imageURL)
+        self.articleImageView.kf.setImage(with: imageURL)
     }
 }
