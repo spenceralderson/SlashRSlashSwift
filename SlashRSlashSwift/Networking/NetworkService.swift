@@ -100,23 +100,23 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
                 let object = try decoder.decode(T.self, from: data)
                 completion((object), nil)
             } catch DecodingError.dataCorrupted(let context) {
-                completion(nil, NetworkServiceError.decodingError)
                 print(context)
-            } catch DecodingError.keyNotFound(let key, let context) {
                 completion(nil, NetworkServiceError.decodingError)
+            } catch DecodingError.keyNotFound(let key, let context) {
                 print("Key '\(key)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
-            } catch DecodingError.valueNotFound(let value, let context) {
                 completion(nil, NetworkServiceError.decodingError)
+            } catch DecodingError.valueNotFound(let value, let context) {
                 print("Value '\(value)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
+                completion(nil, NetworkServiceError.decodingError)
             } catch DecodingError.typeMismatch(let type, let context)  {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
                 completion(nil, NetworkServiceError.decodingError)
             } catch {
-                completion(nil, NetworkServiceError.decodingError)
                 print("error: ", error)
+                completion(nil, NetworkServiceError.decodingError)
             }
         case 400:
             completion(nil, NetworkServiceError.badRequest)
