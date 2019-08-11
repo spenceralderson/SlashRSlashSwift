@@ -13,11 +13,36 @@ enum HTTPSMethod: String {
     case post = "POST"
 }
 
-private enum NetworkServiceError: Error {
+enum NetworkServiceError: Error {
     case notValidHTTPRespose
     case badRequest
     case unexpectedNetworkResponse
+    case decodingError
     case notAValidURL
+    
+    var localizedDescription: String? {
+        switch self {
+        case .notValidHTTPRespose:
+            return "Something went wrong, make sure you're connected to the internet and try again"
+        case .badRequest:
+            return "Something went wrong"
+        case .unexpectedNetworkResponse:
+            return "Something went wrong"
+        case .decodingError:
+            return "Something went wrong"
+        case .notAValidURL:
+            return "Something went wrong"
+        }
+    }
+    
+    public var errorDescription: String? {
+        switch self {
+        case .notValidHTTPRespose:
+            return NSLocalizedString("Something went wrong, make sure you're connected to the internet and try again.", comment: "")
+        default:
+            return "Sorry, something went wrong."
+        }
+    }
 }
 
 //Any object that needs to interact with the networking layer should adhere to this protocol and not access the NetworkManger directly
@@ -75,17 +100,22 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
                 let object = try decoder.decode(T.self, from: data)
                 completion((object), nil)
             } catch DecodingError.dataCorrupted(let context) {
+                completion(nil, NetworkServiceError.decodingError)
                 print(context)
             } catch DecodingError.keyNotFound(let key, let context) {
+                completion(nil, NetworkServiceError.decodingError)
                 print("Key '\(key)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
             } catch DecodingError.valueNotFound(let value, let context) {
+                completion(nil, NetworkServiceError.decodingError)
                 print("Value '\(value)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
             } catch DecodingError.typeMismatch(let type, let context)  {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
+                completion(nil, NetworkServiceError.decodingError)
             } catch {
+                completion(nil, NetworkServiceError.decodingError)
                 print("error: ", error)
             }
         case 400:

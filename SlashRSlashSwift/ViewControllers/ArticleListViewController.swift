@@ -57,7 +57,11 @@ final class ArticleListViewController: UIViewController, NetworkServiceInjectabl
                     self.tableView.reloadData()
                 }
             case .failure(let error):
-                print(error.localizedDescription)
+                if let error = error as? NetworkServiceError {
+                    self.showGenericAlert(tittle: "Error", message: error.errorDescription ?? "")
+                } else {
+                    self.showGenericAlert(tittle: "Error", message: error.localizedDescription)
+                }
                 self.endRefreshing()
             }
         }

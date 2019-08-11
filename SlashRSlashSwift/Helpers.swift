@@ -14,3 +14,14 @@ extension String {
         return UIApplication.shared.canOpenURL(url)
     }
 }
+
+extension UIViewController {
+    func showGenericAlert(tittle: String, message: String) {
+        let alertController = UIAlertController(title: tittle, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
