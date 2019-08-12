@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum HTTPSMethod: String {
-    case get = "GET"
-    case post = "POST"
-}
-
 enum NetworkServiceError: Error {
     case notValidHTTPRespose
     case badRequest
@@ -30,7 +25,7 @@ enum NetworkServiceError: Error {
     }
 }
 
-//Any object that needs to interact with the networking layer should adhere to this protocol and not access the NetworkManger directly
+//Any object that needs to interact with the networking layer should adhere to this protocol and not access the NetworkService directly
 protocol NetworkServiceInjectable {
     var networkService: NetworkManagerProtocol { get }
 }
@@ -50,7 +45,6 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     private let baseUrlString = "https://www.reddit.com/r/"
     
     private func perfromNetworkRequest<T: Decodable>(_ URLString: String,
-                                                         httpsMethod: HTTPSMethod,
                                                          completion: @escaping (T?, Error?) -> ())  {
         guard let url = URL(string: URLString) else {
             completion(nil, NetworkServiceError.notAValidURL)
@@ -113,7 +107,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     }
     
     func fetchArticles(completion: @escaping (Result<[Article] , Error>) -> ()) {
-        self.perfromNetworkRequest(baseUrlString + "swift/.json", httpsMethod: .get) { (result: Response?, error) in
+        self.perfromNetworkRequest(baseUrlString + "swift/.json") { (result: Response?, error) in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -121,7 +115,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
                     completion(.failure(NetworkServiceError.unexpectedNetworkResponse))
                     return
                 }
-                let articles = result.data.children.map{ $0.data }
+                let articles = result.data.children.map{ $0.article }
                 completion(.success(articles))
             }
         }
