@@ -51,7 +51,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     
     private func perfromNetworkRequest<T: Decodable>(_ URLString: String,
                                                          httpsMethod: HTTPSMethod,
-                                                         completion: @escaping (T?, Error?) -> ())  {
+                                                         completion: @escaping (Result<T, Error>) -> ())  {
         guard let url = URL(string: URLString) else {
             completion(nil, NetworkServiceError.notAValidURL)
             return
@@ -61,7 +61,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     }
     
     private func dataTask<T: Decodable>(with request: URLRequest,
-                                            completion: @escaping (T?, Error?) -> ()) {
+                                            completion: @escaping (Result<T, Error>) -> ()) {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse else {
                 completion(nil, NetworkServiceError.notValidHTTPRespose)
@@ -78,7 +78,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     
     private func decodeData<T: Decodable>(response: HTTPURLResponse,
                                           data: Data,
-                                          completion: @escaping (T?, Error?) -> ()) {
+                                          completion: @escaping (Result<T, Error>) -> ()) {
         switch response.statusCode {
         case 200:
             let decoder = JSONDecoder()
@@ -113,16 +113,13 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
     }
     
     func fetchArticles(completion: @escaping (Result<[Article] , Error>) -> ()) {
-        self.perfromNetworkRequest(baseUrlString + "swift/.json", httpsMethod: .get) { (result: Response?, error) in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                guard let result = result else {
-                    completion(.failure(NetworkServiceError.unexpectedNetworkResponse))
-                    return
-                }
+        self.perfromNetworkRequest(baseUrlString + "swift/.json", httpsMethod: .get) { (result: Result<Response, Error>) in
+            switch result {
+            case .success(let response):
                 let articles = result.data.children.map{ $0.data }
                 completion(.success(articles))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
