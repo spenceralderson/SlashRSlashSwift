@@ -53,7 +53,7 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
                                                          httpsMethod: HTTPSMethod,
                                                          completion: @escaping (Result<T, Error>) -> ())  {
         guard let url = URL(string: URLString) else {
-            completion(nil, NetworkServiceError.notAValidURL)
+            completion(.failure(NetworkServiceError.notAValidURL))
             return
         }
         let request = URLRequest(url: url)
@@ -64,11 +64,11 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
                                             completion: @escaping (Result<T, Error>) -> ()) {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse else {
-                completion(nil, NetworkServiceError.notValidHTTPRespose)
+                completion(.failure(NetworkServiceError.notValidHTTPRespose))
                 return
             }
             guard let data = data else {
-                completion(nil, NetworkServiceError.badRequest)
+                completion(.failure(NetworkServiceError.badRequest))
                 return
             }
 
@@ -85,30 +85,30 @@ fileprivate struct NetworkService: NetworkManagerProtocol {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let object = try decoder.decode(T.self, from: data)
-                completion((object), nil)
+                completion(.success(object))
             } catch DecodingError.dataCorrupted(let context) {
                 print(context)
-                completion(nil, NetworkServiceError.decodingError)
+                completion(.failure(NetworkServiceError.decodingError))
             } catch DecodingError.keyNotFound(let key, let context) {
                 print("Key '\(key)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
-                completion(nil, NetworkServiceError.decodingError)
+                completion(.failure(NetworkServiceError.decodingError))
             } catch DecodingError.valueNotFound(let value, let context) {
                 print("Value '\(value)' doesn't exsist:", context.debugDescription)
                 print("codingPath:", context.codingPath)
-                completion(nil, NetworkServiceError.decodingError)
+                completion(.failure(NetworkServiceError.decodingError))
             } catch DecodingError.typeMismatch(let type, let context)  {
                 print("Type '\(type)' mismatch:", context.debugDescription)
                 print("codingPath:", context.codingPath)
-                completion(nil, NetworkServiceError.decodingError)
+                completion(.failure(NetworkServiceError.decodingError))
             } catch {
                 print("error: ", error)
-                completion(nil, NetworkServiceError.decodingError)
+                completion(.failure(NetworkServiceError.decodingError))
             }
         case 400:
-            completion(nil, NetworkServiceError.badRequest)
+            completion(.failure(NetworkServiceError.badRequest))
         default:
-            completion(nil, NetworkServiceError.unexpectedNetworkResponse)
+            completion(.failure(NetworkServiceError.unexpectedNetworkResponse))
         }
     }
     
